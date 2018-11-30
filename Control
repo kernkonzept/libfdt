@@ -1,0 +1,3 @@
+provides: libfdt
+requires: libc
+Maintainer: adam@os.inf.tu-dresden.de
