@@ -19,3 +19,6 @@ This is actually version 1.6.0 plus the following commits:
 
   3e3138b4a9565934487d7b39019282e75a894487
     libfdt: fix fdt_check_full buffer overrun
+
+  0353de739be12b91105a5bcd4bb7ecc88ce08f31
+    libfdt: fix fdt_check_node_offset_ w/ VALID_INPUT
