@@ -1,24 +1,6 @@
 Taken from
 
   git://git.kernel.org/pub/scm/utils/dtc/dtc.git
-  3e3138b4a9565934487d7b39019282e75a894487
+  72d09e2682a41589b46b8cdd4c393b8ed47ac266
 
-This is actually version 1.6.0 plus the following commits:
-
-  73d6e9ecb4179b510408bc526240f829262df361
-    libfdt: fix undefined behaviour in fdt_splice_()
-
-  7be250b4d059771c47be00ec8d4df7f47e4ac77c
-    libfdt: Correct condition for reordering blocks
-
-  f68bfc2668b2e090b5b2f55cce93aad42fb08c6c
-    libfdt: trivial typo fix
-
-  2478b1652c8d39ce7921cda83eaba9c86cadbd36
-    libfdt: add extern "C" for C++
-
-  3e3138b4a9565934487d7b39019282e75a894487
-    libfdt: fix fdt_check_full buffer overrun
-
-  0353de739be12b91105a5bcd4bb7ecc88ce08f31
-    libfdt: fix fdt_check_node_offset_ w/ VALID_INPUT
+Version 1.6.1 + additional fixes
