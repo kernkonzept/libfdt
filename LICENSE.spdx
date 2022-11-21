@@ -8,7 +8,7 @@ SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
 SPDXID: SPDXRef-Document
 DocumentNamespace: spdx:kernkonzept/libfdt-85969586-e7f5-11e8-a7da-ff49a24dda88
-DocumentName: LICENSE.spdx
+DocumentName: libfdt
 
 Creator: Organization: Kernkonzept GmbH (info@kernkonzept.com)
 
