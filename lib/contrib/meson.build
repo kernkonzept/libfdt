@@ -16,26 +16,31 @@ sources = files(
   'fdt_wip.c',
 )
 
-libfdt = library(
+link_args = []
+if cc.has_link_argument('-Wl,--no-undefined')
+    link_args += '-Wl,--no-undefined'
+else
+    # -undefined error is the equivalent of --no-undefined for the macOS linker,
+    # but -undefined would also be understood as a valid argument for GNU ld!
+    link_args += cc.get_supported_link_arguments('-Wl,-undefined,error')
+endif
+
+link_args += version_script
+libfdt = both_libraries(
   'fdt', sources,
-  version: '1.6.0',
-  link_args: ['-Wl,--no-undefined', version_script],
+  version: meson.project_version(),
+  link_args: link_args,
   link_depends: 'version.lds',
   install: true,
 )
 
-libfdt_a = static_library(
-  'fdt', sources,
-  install: true,
-)
+if static_build
+  link_with = libfdt.get_static_lib()
+else
+  link_with = libfdt.get_shared_lib()
+endif
 
 libfdt_inc = include_directories('.')
-
-if static_build
-  link_with = libfdt_a
-else
-  link_with = libfdt
-endif
 
 libfdt_dep = declare_dependency(
   include_directories: libfdt_inc,
