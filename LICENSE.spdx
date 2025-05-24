@@ -16,8 +16,8 @@ Created: 2018-11-13T00:00:00Z
 PackageName: libfdt
 SPDXID: SPDXRef-libfdt
 PackageOriginator: Organization: Kernkonzept GmbH (info@kernkonzept.com)
-PackageLicenseDeclared: GPL-2.0-only WITH GCC-exception-2.0
-PackageLicenseConcluded: GPL-2.0-only WITH GCC-exception-2.0
+PackageLicenseDeclared: MIT
+PackageLicenseConcluded: MIT
 FilesAnalyzed: false
 PackageCopyrightText: NOASSERTION
 PackageDownloadLocation: NOASSERTION
