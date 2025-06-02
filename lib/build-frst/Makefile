@@ -1,7 +1,7 @@
 PKGDIR          ?= ../..
 L4DIR           ?= $(PKGDIR)/../..
 
-TARGET          = libfdt.a
+TARGET          = libfdt.a libfdt.p.a
 SYSTEMS         = $(SYSTEMS_PLAIN)
 PC_FILENAME    :=
 

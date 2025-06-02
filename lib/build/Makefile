@@ -1,7 +1,7 @@
 PKGDIR          ?= ../..
 L4DIR           ?= $(PKGDIR)/../..
 
-TARGET          ?= libfdt.a libfdt.so
+TARGET          ?= libfdt.a libfdt.p.a libfdt.so
 SRC_C           = $(LIBFDT_SRCS)
 PRIVATE_INCDIR  = $(SRC_DIR)/../contrib
 CONTRIB_INCDIR  = libfdt
