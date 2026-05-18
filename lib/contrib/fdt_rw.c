@@ -22,6 +22,12 @@ static int fdt_blocks_misordered_(const void *fdt,
 		    (fdt_off_dt_strings(fdt) + fdt_size_dt_strings(fdt)));
 }
 
+static void fdt_downgrade_version(void *fdt)
+{
+	if (!can_assume(LATEST) && fdt_version(fdt) > FDT_LAST_SUPPORTED_VERSION)
+		fdt_set_version(fdt, FDT_LAST_SUPPORTED_VERSION);
+}
+
 static int fdt_rw_probe_(void *fdt)
 {
 	if (can_assume(VALID_DTB))
@@ -33,9 +39,8 @@ static int fdt_rw_probe_(void *fdt)
 	if (fdt_blocks_misordered_(fdt, sizeof(struct fdt_reserve_entry),
 				   fdt_size_dt_struct(fdt)))
 		return -FDT_ERR_BADLAYOUT;
-	if (!can_assume(LATEST) && fdt_version(fdt) > 17)
-		fdt_set_version(fdt, 17);
 
+	fdt_downgrade_version(fdt);
 	return 0;
 }
 
@@ -161,7 +166,11 @@ int fdt_add_mem_rsv(void *fdt, uint64_t address, uint64_t size)
 
 	FDT_RW_PROBE(fdt);
 
-	re = fdt_mem_rsv_w_(fdt, fdt_num_mem_rsv(fdt));
+	err = fdt_num_mem_rsv(fdt);
+	if (err < 0)
+		return err;
+
+	re = fdt_mem_rsv_w_(fdt, err);
 	err = fdt_splice_mem_rsv_(fdt, re, 0, 1);
 	if (err)
 		return err;
@@ -174,10 +183,15 @@ int fdt_add_mem_rsv(void *fdt, uint64_t address, uint64_t size)
 int fdt_del_mem_rsv(void *fdt, int n)
 {
 	struct fdt_reserve_entry *re = fdt_mem_rsv_w_(fdt, n);
+	int num;
 
 	FDT_RW_PROBE(fdt);
 
-	if (n >= fdt_num_mem_rsv(fdt))
+	num = fdt_num_mem_rsv(fdt);
+	if (num < 0)
+		return num;
+
+	if (n >= num)
 		return -FDT_ERR_NOTFOUND;
 
 	return fdt_splice_mem_rsv_(fdt, re, 1, 0);
@@ -434,8 +448,10 @@ int fdt_open_into(const void *fdt, void *buf, int bufsize)
 
 	FDT_RO_PROBE(fdt);
 
-	mem_rsv_size = (fdt_num_mem_rsv(fdt)+1)
-		* sizeof(struct fdt_reserve_entry);
+	err = fdt_num_mem_rsv(fdt);
+	if (err < 0)
+		return err;
+	mem_rsv_size = (err + 1) * sizeof(struct fdt_reserve_entry);
 
 	if (can_assume(LATEST) || fdt_version(fdt) >= 17) {
 		struct_size = fdt_size_dt_struct(fdt);
@@ -493,12 +509,14 @@ int fdt_open_into(const void *fdt, void *buf, int bufsize)
 
 int fdt_pack(void *fdt)
 {
-	int mem_rsv_size;
+	int err, mem_rsv_size;
 
 	FDT_RW_PROBE(fdt);
 
-	mem_rsv_size = (fdt_num_mem_rsv(fdt)+1)
-		* sizeof(struct fdt_reserve_entry);
+	err = fdt_num_mem_rsv(fdt);
+	if (err < 0)
+		return err;
+	mem_rsv_size = (err+1) * sizeof(struct fdt_reserve_entry);
 	fdt_packblocks_(fdt, fdt, mem_rsv_size, fdt_size_dt_struct(fdt),
 			fdt_size_dt_strings(fdt));
 	fdt_set_totalsize(fdt, fdt_data_size_(fdt));
